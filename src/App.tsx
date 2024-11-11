@@ -8,6 +8,8 @@ import EventInfo from "./components/main/EventInfo";
 function App() {
 	const isLoggedIn = false;
 
+	
+
 	return (
 		<div className="flex flex-col grow">
 			{/* header with logo, event name and user actions */}
