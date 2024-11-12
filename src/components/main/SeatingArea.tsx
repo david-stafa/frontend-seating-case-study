@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Seat } from "../Seat";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 // Number of rows in venue
 const ROWS = 10;
@@ -49,6 +49,7 @@ export default function SeatingArea() {
 		getTicketsAndSeats();
 	}, []);
 
+	// return error message when fetching fails
 	if (error) return <p>{error}</p>;
 
 	return (
@@ -66,20 +67,20 @@ export default function SeatingArea() {
 					gridAutoRows: "40px",
 				}}
 			>
+				{/* render skeleton UI when fetching is in progress */}
 				{loading
 					? seatingMapSkeleton()
-					: 
-						// seating map
+					: // seating map
 						seatRows &&
 						Array.from({ length: ROWS * COLUMNS }, (_, i) => {
 							const rowIndex = Math.floor(i / COLUMNS); // calculate current row index
 							const seatInRow = (i % COLUMNS) + 1; // seat position within the row
 
-							// check if the seat is taken
-							const isSeatTaken = checkIfSeatIsTaken(i, seatRows);
+							// check if the seat is free
+							const isSeatFree = checkIfSeatIsFree(i, seatRows);
 
 							return (
-								<>
+								<React.Fragment key={i}>
 									{/* display the row letter only once for each row */}
 									{seatInRow === 1 && (
 										<span className="m-auto">
@@ -88,11 +89,11 @@ export default function SeatingArea() {
 									)}
 									{/* seat element */}
 									<Seat
-										key={i}
-										disabled={!isSeatTaken}
+										// if isSeatFree === false -> disabled === true -> renders disabled seat
+										disabled={!isSeatFree}
 										seatNumber={seatInRow}
 									/>
-								</>
+								</React.Fragment>
 							);
 						})}
 			</div>
@@ -100,14 +101,17 @@ export default function SeatingArea() {
 	);
 }
 
-function checkIfSeatIsTaken(seatIndex: number, seatRows: SeatRows) {
+// function to compare seating map and fetch data to provide free and taken seats
+function checkIfSeatIsFree(seatIndex: number, seatRows: SeatRows) {
 	const rowIndex = Math.floor(seatIndex / COLUMNS); // calculate current row
 	const placeInRow = (seatIndex % COLUMNS) + 1; // calculate seat position within the row
 
 	// check if the row exists before accessing its seats
 	if (seatRows[rowIndex] && seatRows[rowIndex].seats) {
+		// Check if any seat from fetched API in the current row matches the calculated placeInRow
 		return seatRows[rowIndex].seats.some((seat) => seat.place === placeInRow);
 	}
+	// if the row doesn't exist or there are no seats in it, return false -> seat is taken
 	return false;
 }
 
@@ -117,14 +121,17 @@ function seatingMapSkeleton() {
 		const seatInRow = (i % COLUMNS) + 1; // seat position within the row
 
 		return (
-			<>
+			<React.Fragment key={i}>
 				{/* display the row letter only once for each row */}
 				{seatInRow === 1 && (
 					<span className="m-auto">{String.fromCharCode(65 + rowIndex)}</span> // Convert row index to letter (0 -> 'A', 1 -> 'B', etc.)
 				)}
 				{/* seat skeleton element*/}
-				<div key={i} className="size-8 animate-pulse bg-zinc-300 rounded-full" />
-			</>
+				<div
+					key={i}
+					className="size-8 animate-pulse rounded-full bg-zinc-300"
+				/>
+			</React.Fragment>
 		);
 	});
 }
