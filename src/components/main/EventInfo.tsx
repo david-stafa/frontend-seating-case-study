@@ -3,18 +3,18 @@ import { Button } from "../ui/button";
 import axios from "axios";
 
 type Event = {
-	eventId: "uuid";
-	namePub: "string";
-	description: "string";
-	currencyIso: "string";
-	dateFrom: "datetime";
-	dateTo: "datetime";
-	headerImageUrl: "string";
-	place: "string";
-} | null;
+	eventId: string;
+	namePub: string;
+	description: string;
+	currencyIso: string;
+	dateFrom: Date;
+	dateTo: Date;
+	headerImageUrl: string;
+	place: string;
+};
 
 export default function EventInfo() {
-	const [event, setEvent] = useState<Event>(null);
+	const [event, setEvent] = useState<Event | null>(null);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
 
@@ -41,8 +41,7 @@ export default function EventInfo() {
 	return (
 		// event info
 		<aside className="w-full max-w-sm bg-white rounded-md shadow-sm p-3 flex flex-col gap-2">
-
-			{!event && loading ? (
+			{loading ? (
 				// skeleton when loading data
 				<EventinfoSkeleton />
 			) : (
