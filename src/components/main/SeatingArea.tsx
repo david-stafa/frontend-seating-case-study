@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Seat } from "../Seat";
-import React, { ReactNode, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 // Number of rows in venue
 const ROWS = 10;
