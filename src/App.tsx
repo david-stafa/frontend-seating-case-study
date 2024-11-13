@@ -40,7 +40,7 @@ function App() {
 			</MainWrapper>
 
 			{/* footer with order details and checkout */}
-			<OrderDetails shoppingCart={shoppingCart} />
+			<OrderDetails shoppingCart={shoppingCart} deleteCartItem={deleteCartItem}/>
 		</div>
 	);
 }

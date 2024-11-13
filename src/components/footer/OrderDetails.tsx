@@ -1,11 +1,18 @@
-import { CartItem } from "@/types/types";
+import { CartItem, DeleteCartItemFunction } from "@/types/types";
 import { Button } from "../ui/button";
+import OrderOverviewPopover from "./OrderOverviewPopover";
+import { formatCurrency } from "@/lib/utils";
 
 export default function OrderDetails({
 	shoppingCart,
+	deleteCartItem
 }: {
 	shoppingCart: CartItem[];
+	deleteCartItem: DeleteCartItemFunction;
 }) {
+
+	const shoppingCartPrice = formatCurrency(totalPrice(shoppingCart));
+
 	return (
 		// bottom cart affix (wrapper)
 		<nav className="sticky bottom-0 left-0 right-0 flex justify-center border-t border-zinc-200 bg-white">
@@ -15,18 +22,23 @@ export default function OrderDetails({
 
 				<div className="flex flex-col">
 					<span>Total for {shoppingCart.length} tickets</span>
-					<span className="text-2xl font-semibold">
-						{totalPrice(shoppingCart)} CZK
-					</span>
+					<span className="text-2xl font-semibold">{shoppingCartPrice}</span>
 				</div>
 				<div className={`text-lg font-bold`}>
 					{getSeatPosition(shoppingCart)}
 				</div>
 
 				{/* checkout button */}
-				<Button disabled variant="default">
-					Checkout now
-				</Button>
+				<div>
+					<OrderOverviewPopover
+						shoppingCart={shoppingCart}
+						deleteCartItem={deleteCartItem}
+						shoppingCartPrice={shoppingCartPrice}
+					/>
+					<Button disabled variant="default" className="ml-1">
+						Checkout now
+					</Button>
+				</div>
 			</div>
 		</nav>
 	);
