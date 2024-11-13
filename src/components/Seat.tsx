@@ -108,7 +108,7 @@ export const Seat = React.forwardRef<HTMLDivElement, SeatProps>(
 									if (ticketData && props.seatData) {
 										props.addCartItem({
 											ticketType: { ...ticketData },
-											seat: { ...props.seatData },
+											seat: { ...props.seatData, row: props.rowLetter },
 										});
 									} else {
 										console.warn(

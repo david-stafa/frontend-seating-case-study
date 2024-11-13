@@ -17,6 +17,7 @@ export type SeatType = {
 	seatId: string;
 	place: number;
 	ticketTypeId: string;
+	row?: string;
 };
 
 export type AddCartItemFunction = (item: CartItem) => void;
