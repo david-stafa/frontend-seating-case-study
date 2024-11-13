@@ -18,3 +18,15 @@ export type SeatType = {
 	place: number;
 	ticketTypeId: string;
 };
+
+export type AddCartItemFunction = (item: CartItem) => void;
+export type DeleteCartItemFunction = (seatID: string) => void;
+
+export type CartItem = {
+	seat: SeatType;
+	ticketType: {
+		id: string;
+		name: string;
+		price: number;
+	};
+};

@@ -1,14 +1,30 @@
 import axios from "axios";
 import { Seat } from "../Seat";
 import React, { useEffect, useState } from "react";
-import { SeatRows, TicketType } from "@/types/types";
+import {
+	AddCartItemFunction,
+	CartItem,
+	DeleteCartItemFunction,
+	SeatRows,
+	TicketType,
+} from "@/types/types";
 
 // Number of rows in venue
 const ROWS = 10;
 // Number of seats in one row
 const COLUMNS = 15;
 
-export default function SeatingArea() {
+interface SeatingAreaProps {
+	addCartItem: AddCartItemFunction;
+	deleteCartItem: DeleteCartItemFunction;
+	shoppingCart: CartItem[];
+}
+
+export default function SeatingArea({
+	addCartItem,
+	deleteCartItem,
+	shoppingCart,
+}: SeatingAreaProps) {
 	const [tickets, setTickets] = useState<TicketType | undefined>(undefined);
 	const [seatRows, setSeatRows] = useState<SeatRows | undefined>(undefined);
 	const [loading, setLoading] = useState(true);
@@ -60,6 +76,7 @@ export default function SeatingArea() {
 						Array.from({ length: ROWS * COLUMNS }, (_, i) => {
 							const rowIndex = Math.floor(i / COLUMNS); // calculate current row index
 							const seatInRow = (i % COLUMNS) + 1; // seat position within the row
+							// get row letter converting number based on ASCII table code
 							const rowLetter = String.fromCharCode(65 + rowIndex);
 
 							// check if the seet is free and get its data
@@ -79,6 +96,9 @@ export default function SeatingArea() {
 										seatData={seatData}
 										ticketTypes={tickets}
 										rowLetter={rowLetter}
+										addCartItem={addCartItem}
+										deleteCartItem={deleteCartItem}
+										shoppingCart={shoppingCart}
 									/>
 								</React.Fragment>
 							);
