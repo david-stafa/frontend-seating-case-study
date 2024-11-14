@@ -74,7 +74,7 @@ export const Seat = React.forwardRef<HTMLDivElement, SeatProps>(
 					{props.seatData && ticketData && (
 						// seat details
 						<main>
-							<div>{`Řada: ${props.rowLetter} - Sedadlo: ${props.seatData.place}`}</div>
+							<div>{`Row: ${props.rowLetter} - Seat: ${props.seatData.place}`}</div>
 							<div>{ticketData?.name}</div>
 							<div>{formatCurrency(ticketData.price)}</div>
 						</main>
