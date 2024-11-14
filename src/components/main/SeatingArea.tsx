@@ -8,6 +8,7 @@ import {
 	SeatRows,
 	TicketType,
 } from "@/types/types";
+import SeatingCaption from "./SeatingCaption";
 
 // Number of rows in venue
 const ROWS = 10;
@@ -55,56 +56,57 @@ export default function SeatingArea({
 
 	return (
 		// venue card
-		<div className="grow rounded-md bg-white p-3 shadow-sm">
-			{/* stage div */}
-			<div className="flex items-center">
-				<span className="mb-4 w-full border-b pb-2 text-center">Stage</span>
-			</div>
-			{/* seating div */}
-			<div
-				className="grid h-fit"
-				style={{
-					gridTemplateColumns: `repeat(${COLUMNS + 1}, 1fr)`,
-					gridAutoRows: "40px",
-				}}
-			>
-				{/* render skeleton UI when fetching is in progress */}
-				{loading
-					? seatingMapSkeleton()
-					: // seating map
-						seatRows &&
-						Array.from({ length: ROWS * COLUMNS }, (_, i) => {
-							const rowIndex = Math.floor(i / COLUMNS); // calculate current row index
-							const seatInRow = (i % COLUMNS) + 1; // seat position within the row
-							// get row letter converting number based on ASCII table code
-							const rowLetter = String.fromCharCode(65 + rowIndex);
+			<div className="grow rounded-md bg-white p-3 shadow-sm">
+				{/* stage div */}
+				<div className="flex items-center">
+					<span className="mb-4 w-full border-b pb-2 text-center">Stage</span>
+				</div>
+				{/* seating div */}
+				<div
+					className="grid h-fit"
+					style={{
+						gridTemplateColumns: `repeat(${COLUMNS + 1}, 1fr)`,
+						gridAutoRows: "40px",
+					}}
+				>
+					{/* render skeleton UI when fetching is in progress */}
+					{loading
+						? seatingMapSkeleton()
+						: // seating map
+							seatRows &&
+							Array.from({ length: ROWS * COLUMNS }, (_, i) => {
+								const rowIndex = Math.floor(i / COLUMNS); // calculate current row index
+								const seatInRow = (i % COLUMNS) + 1; // seat position within the row
+								// get row letter converting number based on ASCII table code
+								const rowLetter = String.fromCharCode(65 + rowIndex);
 
-							// check if the seet is free and get its data
-							const seatData = getSeatData(rowIndex, seatInRow, seatRows);
+								// check if the seet is free and get its data
+								const seatData = getSeatData(rowIndex, seatInRow, seatRows);
 
-							return (
-								<React.Fragment key={i}>
-									{/* display the row letter only once for each row */}
-									{seatInRow === 1 && (
-										<span className="m-auto">{rowLetter}</span> // Convert row index to letter (0 -> 'A', 1 -> 'B', etc.)
-									)}
-									{/* seat element */}
-									<Seat
-										// if seatData === undefined -> disabled is passing true || if seatData === true -> disabled passing false -> seat is rendered as free
-										disabled={!seatData}
-										seatNumber={seatInRow}
-										seatData={seatData}
-										ticketTypes={tickets}
-										rowLetter={rowLetter}
-										addCartItem={addCartItem}
-										deleteCartItem={deleteCartItem}
-										shoppingCart={shoppingCart}
-									/>
-								</React.Fragment>
-							);
-						})}
+								return (
+									<React.Fragment key={i}>
+										{/* display the row letter only once for each row */}
+										{seatInRow === 1 && (
+											<span className="m-auto">{rowLetter}</span> // Convert row index to letter (0 -> 'A', 1 -> 'B', etc.)
+										)}
+										{/* seat element */}
+										<Seat
+											// if seatData === undefined -> disabled is passing true || if seatData === true -> disabled passing false -> seat is rendered as free
+											disabled={!seatData}
+											seatNumber={seatInRow}
+											seatData={seatData}
+											ticketTypes={tickets}
+											rowLetter={rowLetter}
+											addCartItem={addCartItem}
+											deleteCartItem={deleteCartItem}
+											shoppingCart={shoppingCart}
+										/>
+									</React.Fragment>
+								);
+							})}
+				</div>
+				<SeatingCaption />
 			</div>
-		</div>
 	);
 }
 
