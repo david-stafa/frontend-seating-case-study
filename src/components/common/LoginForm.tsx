@@ -36,7 +36,7 @@ export default function LoginForm(props: LogInFormProps) {
 	}
 
 	return (
-		<div className="mb-2">
+		<div className="mb-2 grow">
 			{/* handle unauthorized log in */}
 			{error?.status === 401 && (
 				<div className="mb-1 text-sm font-bold text-red-500">
@@ -77,7 +77,7 @@ export default function LoginForm(props: LogInFormProps) {
 					/>
 				</div>
 				{/* submit button */}
-				<Button type="submit" variant="default">
+				<Button type="submit" variant="default" className="w-28">
 					Log in
 				</Button>
 			</form>
