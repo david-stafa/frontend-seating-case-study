@@ -1,3 +1,5 @@
+import { AxiosResponse } from "axios";
+
 export type TicketType = {
 	id: string;
 	name: string;
@@ -30,4 +32,18 @@ export type CartItem = {
 		name: string;
 		price: number;
 	};
+};
+
+export type TicketOrder = {
+	eventId: string;
+	user: {
+		email: string;
+		firstName: string;
+		lastName: string;
+	};
+	tickets: { ticketTypeId: string; seatId: string }[];
+};
+
+export type ApiResponse = AxiosResponse & {
+	status: number;
 };

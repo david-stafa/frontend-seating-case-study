@@ -29,8 +29,8 @@ export default function OrderOverviewPopover({
 }) {
 	return (
 		<Popover>
-			<PopoverTrigger>
-				<Button>Tickets overview</Button>
+			<PopoverTrigger asChild>
+				<Button variant="secondary">Tickets overview</Button>
 			</PopoverTrigger>
 			<PopoverContent className="w-[400px]">
 				<Table>
@@ -48,6 +48,7 @@ export default function OrderOverviewPopover({
 					<TableBody>
 						{ticketTableCells(shoppingCart, deleteCartItem)}
 					</TableBody>
+					{/* if there is one or more items in cart -> display table footer with total price  */}
 					{shoppingCart.length > 1 && (
 						<TableFooter>
 							<TableRow>
@@ -62,18 +63,20 @@ export default function OrderOverviewPopover({
 	);
 }
 
+// create ticket table cells for each ticket in shopping cart with according data and delete function
 function ticketTableCells(
 	cart: CartItem[],
 	deleteFunction: DeleteCartItemFunction,
 ) {
-	return cart.map((item) => {
+	return cart.map((item, i) => {
 		return (
-			<TableRow>
+			<TableRow key={i}>
 				<TableCell className="font-medium">
 					{item.ticketType.name === "VIP ticket" ? "VIP" : "Regular"}
 				</TableCell>
 				<TableCell>{item.seat.row + item.seat.place.toString()}</TableCell>
 				<TableCell>{formatCurrency(item.ticketType.price)}</TableCell>
+				{/* delete ticket from shopping cart action */}
 				<TableCell>
 					<X
 						className="cursor-pointer"

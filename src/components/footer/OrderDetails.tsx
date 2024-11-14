@@ -1,16 +1,16 @@
 import { CartItem, DeleteCartItemFunction } from "@/types/types";
-import { Button } from "../ui/button";
 import OrderOverviewPopover from "./OrderOverviewPopover";
 import { formatCurrency } from "@/lib/utils";
+import CheckoutDialog from "./CheckoutDialog";
 
 export default function OrderDetails({
 	shoppingCart,
-	deleteCartItem
+	deleteCartItem,
 }: {
 	shoppingCart: CartItem[];
 	deleteCartItem: DeleteCartItemFunction;
 }) {
-
+	// total price of items in shopping cart formatted to CZK
 	const shoppingCartPrice = formatCurrency(totalPrice(shoppingCart));
 
 	return (
@@ -19,11 +19,11 @@ export default function OrderDetails({
 			{/* inner content */}
 			<div className="flex max-w-screen-lg grow items-center justify-between gap-4 p-6">
 				{/* total in cart state */}
-
 				<div className="flex flex-col">
 					<span>Total for {shoppingCart.length} tickets</span>
 					<span className="text-2xl font-semibold">{shoppingCartPrice}</span>
 				</div>
+				{/* in cart seats row and position */}
 				<div className={`text-lg font-bold`}>
 					{getSeatPosition(shoppingCart)}
 				</div>
@@ -35,15 +35,14 @@ export default function OrderDetails({
 						deleteCartItem={deleteCartItem}
 						shoppingCartPrice={shoppingCartPrice}
 					/>
-					<Button disabled variant="default" className="ml-1">
-						Checkout now
-					</Button>
+					<CheckoutDialog shoppingCart={shoppingCart} />
 				</div>
 			</div>
 		</nav>
 	);
 }
 
+// get total priice items in cart
 function totalPrice(cart: CartItem[]) {
 	let itemsPrice = 0;
 	cart.forEach((item) => {
@@ -52,10 +51,13 @@ function totalPrice(cart: CartItem[]) {
 	return itemsPrice;
 }
 
+// get row letter and seat position of a seat in cart and return span with that data
 function getSeatPosition(cart: CartItem[]) {
-	return cart.map((item) => {
+	return cart.map((item, i) => {
 		return (
 			<span
+				key={i}
+				// color VIP and Regular ticket accordingly
 				className={`${item.ticketType.name === "VIP ticket" ? "text-[#ec6e63]" : "text-[#7f46db]"} mr-1`}
 			>
 				{item.seat.row + item.seat.place.toString()}
