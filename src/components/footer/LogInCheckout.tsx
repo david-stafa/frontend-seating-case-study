@@ -16,12 +16,14 @@ interface LogInCheckoutProps {
 }
 
 export default function LogInCheckout(props: LogInCheckoutProps) {
+	// store log in response from POST/login
 	const [logInResponse, setLogInResponse] = useState<AxiosResponse | null>(
 		null,
 	);
-
+	// store loading status when callin API POST/login
 	const [isLogInLoading, setIsLogInLoading] = useState(false);
 
+	// create ticket order to checkout logged in user cart
 	const ticketOrder =
 		logInResponse &&
 		createTicketsOrder(props.shoppingCart, EVENTID, {
@@ -57,27 +59,36 @@ export default function LogInCheckout(props: LogInCheckoutProps) {
 		}
 	}
 
-	return isLogInLoading ? (
-		<div className="grow">
-			<Loader />
-		</div>
-	) : logInResponse?.status === 200 ? (
-		<div className="flex grow flex-col justify-center">
-			<div className="flex items-center justify-center">
-				<CircleCheckIcon className="mr-2 h-8 w-8 text-green-500" />
-				<span className="text-sm">Log in successfull.</span>
+	return (
+		// disaplay loader when API call is in progress
+		isLogInLoading ? (
+			<div className="grow">
+				<Loader />
 			</div>
-			<div className="mt-6 flex flex-col items-center justify-center">
-				<span>{"Welcome back " + logInResponse.data.user.firstName + "!"}</span>
-				<Button className="mt-2" onClick={handleOrder}>
-					Buy tickets
-				</Button>
+		) : // enable checkout if user logged in successfully
+		logInResponse?.status === 200 ? (
+			<div className="flex grow flex-col justify-center">
+				{/* icon with message */}
+				<div className="flex items-center justify-center">
+					<CircleCheckIcon className="mr-2 h-8 w-8 text-green-500" />
+					<span className="text-sm">Log in successfull.</span>
+				</div>
+				<div className="mt-6 flex flex-col items-center justify-center">
+					{/* welcome message */}
+					<span>
+						{"Welcome back " + logInResponse.data.user.firstName + "!"}
+					</span>
+					{/* submit order button */}
+					<Button className="mt-2" onClick={handleOrder}>
+						Buy tickets
+					</Button>
+				</div>
 			</div>
-		</div>
-	) : (
-		<LoginForm
-			setLogInResponse={setLogInResponse}
-			setIsLogInLoading={setIsLogInLoading}
-		/>
+		) : (
+			<LoginForm
+				setLogInResponse={setLogInResponse}
+				setIsLogInLoading={setIsLogInLoading}
+			/>
+		)
 	);
 }
