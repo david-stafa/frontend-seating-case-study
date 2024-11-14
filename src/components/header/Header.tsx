@@ -4,17 +4,19 @@ import HeaderDropdownMenu from "./HeaderDropdownMenu";
 export default function Header({ isLoggedIn }: { isLoggedIn: boolean }) {
 	return (
 		// header (wrapper)
-		<nav className="sticky top-0 left-0 right-0 bg-white border-b border-zinc-200 flex justify-center">
+		<nav className="sticky left-0 right-0 top-0 flex justify-center border-b border-zinc-200 bg-white">
 			{/* inner content */}
-			<div className="max-w-screen-lg p-4 grow flex items-center justify-between gap-3">
+			<div className="flex max-w-screen-lg grow items-center justify-between gap-3 p-4">
 				{/* application/author image/logo placeholder */}
-				<div className="max-w-[250px] w-full flex">
-					<div className="bg-zinc-100 rounded-md size-12" />
+				<div className="flex w-full max-w-[250px]">
+					<img src="/NfctronLogoDark.svg" alt="logo" />
 				</div>
 				{/* app/author title/name placeholder */}
-				<div className="bg-zinc-100 rounded-md h-8 w-[200px]" />
+				<div className="text-2xl font-bold transition-colors duration-300 text-[#25196a]">
+					NFCtron Keynote 2024
+				</div>
 				{/* user menu */}
-				<div className="max-w-[250px] w-full flex justify-end">
+				<div className="flex w-full max-w-[250px] justify-end">
 					{isLoggedIn ? (
 						// User action dropdown menu
 						<HeaderDropdownMenu />
