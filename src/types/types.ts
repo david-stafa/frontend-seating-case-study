@@ -1,5 +1,3 @@
-import { AxiosResponse } from "axios";
-
 export type TicketType = {
 	id: string;
 	name: string;
@@ -42,8 +40,4 @@ export type TicketOrder = {
 		lastName: string;
 	};
 	tickets: { ticketTypeId: string; seatId: string }[];
-};
-
-export type ApiResponse = AxiosResponse & {
-	status: number;
 };

@@ -6,9 +6,11 @@ import CheckoutDialog from "./CheckoutDialog";
 export default function OrderDetails({
 	shoppingCart,
 	deleteCartItem,
+	clearShoppingCart
 }: {
 	shoppingCart: CartItem[];
 	deleteCartItem: DeleteCartItemFunction;
+	clearShoppingCart: () => void
 }) {
 	// total price of items in shopping cart formatted to CZK
 	const shoppingCartPrice = formatCurrency(totalPrice(shoppingCart));
@@ -35,7 +37,10 @@ export default function OrderDetails({
 						deleteCartItem={deleteCartItem}
 						shoppingCartPrice={shoppingCartPrice}
 					/>
-					<CheckoutDialog shoppingCart={shoppingCart} />
+					<CheckoutDialog
+						shoppingCart={shoppingCart}
+						clearShoppingCart={clearShoppingCart}
+					/>
 				</div>
 			</div>
 		</nav>

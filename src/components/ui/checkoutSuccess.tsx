@@ -20,7 +20,7 @@ export default function CheckoutSuccess() {
 	);
 }
 
-function CircleCheckIcon(
+export function CircleCheckIcon(
 	props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>,
 ) {
 	return (

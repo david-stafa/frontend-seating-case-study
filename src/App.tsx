@@ -22,6 +22,10 @@ function App() {
 		);
 	}
 
+	function clearShoppingCart() {
+		setShoppingCart([]);
+	}
+
 	console.log(shoppingCart);
 
 	return (
@@ -40,7 +44,11 @@ function App() {
 			</MainWrapper>
 
 			{/* footer with order details and checkout */}
-			<OrderDetails shoppingCart={shoppingCart} deleteCartItem={deleteCartItem}/>
+			<OrderDetails
+				shoppingCart={shoppingCart}
+				deleteCartItem={deleteCartItem}
+				clearShoppingCart={clearShoppingCart}
+			/>
 		</div>
 	);
 }

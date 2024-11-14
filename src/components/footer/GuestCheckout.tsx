@@ -2,30 +2,30 @@ import { useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import { ApiResponse, CartItem, TicketOrder } from "@/types/types";
-import axios from "axios";
+import { CartItem } from "@/types/types";
+import axios, { AxiosResponse } from "axios";
+import { createTicketsOrder, EVENTID } from "@/lib/utils";
 
 export default function GuestCheckout({
 	shoppingCart,
 	setLoading,
 	setError,
 	setResponse,
+	clearShoppingCart,
 }: {
 	shoppingCart: CartItem[];
 	setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 	setError: React.Dispatch<React.SetStateAction<boolean>>;
-	setResponse: React.Dispatch<React.SetStateAction<ApiResponse | null>>;
+	setResponse: React.Dispatch<React.SetStateAction<AxiosResponse | null>>;
+	clearShoppingCart: () => void;
 }) {
 	// handle user inputs -> stored in these three values
 	const [email, setEmail] = useState("");
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
 
-	// ID of target event
-	const eventId = "3348b37f-6ee2-4513-ac40-b55eb676319b";
-
 	// create ticket order based on API requirements
-	const ticketOrder = createTicketsOrder(shoppingCart, eventId, {
+	const ticketOrder = createTicketsOrder(shoppingCart, EVENTID, {
 		email: email,
 		firstName: firstName,
 		lastName: lastName,
@@ -46,6 +46,7 @@ export default function GuestCheckout({
 			console.log("Final response:", res);
 			//store response to variable in parent component -> display succes component if response.status === 200
 			setResponse(res);
+			clearShoppingCart();
 		} catch (error: unknown) {
 			// store error to variable in parent component -> display error components if true
 			setError(true);
@@ -59,7 +60,7 @@ export default function GuestCheckout({
 
 	return (
 		// guest order form
-		<form onSubmit={handleOrder}>
+		<form onSubmit={handleOrder} className="grow">
 			<div>
 				{/* first name input */}
 				<div className="mb-3">
@@ -102,31 +103,4 @@ export default function GuestCheckout({
 			</div>
 		</form>
 	);
-}
-
-// user type according to user in expected by POST/order
-type User = { firstName: string; lastName: string; email: string };
-
-// function to create ticket order according to object expected by POST/order
-function createTicketsOrder(cart: CartItem[], eventId: string, user: User) {
-	const ticketOrder: TicketOrder = {
-		eventId: eventId,
-		tickets: [],
-		user: {
-			email: user.email,
-			firstName: user.firstName,
-			lastName: user.lastName,
-		},
-	};
-
-	// for each item in card create a ticket object according to ticket array of objects expected by POST/order
-	cart.forEach((item) => {
-		const oneTicket = {
-			seatId: item.seat.seatId,
-			ticketTypeId: item.ticketType.id,
-		};
-		ticketOrder.tickets.push(oneTicket);
-	});
-
-	return ticketOrder;
 }

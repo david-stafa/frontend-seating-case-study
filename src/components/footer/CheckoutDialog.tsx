@@ -1,5 +1,4 @@
 import { useState } from "react";
-import LoginForm from "../common/LoginForm";
 import { Button } from "../ui/button";
 import {
 	Dialog,
@@ -10,25 +9,31 @@ import {
 	DialogTrigger,
 } from "../ui/dialog";
 import GuestCheckout from "./GuestCheckout";
-import { ApiResponse, CartItem } from "@/types/types";
+import { CartItem } from "@/types/types";
 import Loader from "../ui/loader";
 import CheckoutSuccess from "../ui/checkoutSuccess";
 import CheckoutError from "../ui/checkoutError";
+import LogInCheckout from "./LogInCheckout";
+import { AxiosResponse } from "axios";
 
 export default function CheckoutDialog({
 	shoppingCart,
+	clearShoppingCart,
 }: {
 	shoppingCart: CartItem[];
+	clearShoppingCart: () => void;
 }) {
-
-	// value from loged in user or guest checkout order 
-	const [response, setResponse] = useState<ApiResponse | null>(null);
+	// value from loged in user or guest checkout order
+	const [response, setResponse] = useState<AxiosResponse | null>(null);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(false);
 
 	return (
 		<Dialog>
-			<DialogTrigger asChild disabled={shoppingCart.length === 0}>
+			<DialogTrigger
+				asChild
+				disabled={shoppingCart.length === 0}
+			>
 				<Button variant="default" className="ml-1">
 					Checkout now
 				</Button>
@@ -50,15 +55,22 @@ export default function CheckoutDialog({
 				) : (
 					<div className="flex justify-between">
 						{/* Log in */}
-						<LoginForm />
+						<LogInCheckout
+							shoppingCart={shoppingCart}
+							setLoading={setLoading}
+							setError={setError}
+							setResponse={setResponse}
+							clearShoppingCart={clearShoppingCart}
+						/>
 						{/* Vertical divider */}
-						<div className="mx-1 w-0.5 bg-gray-200" />
+						<div className="mx-4 w-0.5 bg-gray-200" />
 						{/* Guest checkout */}
 						<GuestCheckout
 							shoppingCart={shoppingCart}
 							setLoading={setLoading}
 							setError={setError}
 							setResponse={setResponse}
+							clearShoppingCart={clearShoppingCart}
 						/>
 					</div>
 				)}
