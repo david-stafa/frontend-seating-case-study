@@ -30,19 +30,12 @@ export default function CheckoutDialog({
 
 	return (
 		<Dialog>
-			<DialogTrigger
-				asChild
-				disabled={shoppingCart.length === 0}
-			>
+			<DialogTrigger asChild disabled={shoppingCart.length === 0}>
 				<Button variant="default" className="ml-1">
 					Checkout now
 				</Button>
 			</DialogTrigger>
 			<DialogContent className="bg-white">
-				<DialogHeader>
-					<DialogTitle>Checkout your order</DialogTitle>
-					<DialogDescription>Log in or continue as a guest.</DialogDescription>
-				</DialogHeader>
 				{loading ? (
 					// display loader if API call is in progress
 					<Loader />
@@ -53,26 +46,34 @@ export default function CheckoutDialog({
 					// display sucess if API call is successfull -> response.status === 200
 					<CheckoutSuccess />
 				) : (
-					<div className="flex justify-between">
-						{/* Log in */}
-						<LogInCheckout
-							shoppingCart={shoppingCart}
-							setLoading={setLoading}
-							setError={setError}
-							setResponse={setResponse}
-							clearShoppingCart={clearShoppingCart}
-						/>
-						{/* Vertical divider */}
-						<div className="mx-4 w-0.5 bg-gray-200" />
-						{/* Guest checkout */}
-						<GuestCheckout
-							shoppingCart={shoppingCart}
-							setLoading={setLoading}
-							setError={setError}
-							setResponse={setResponse}
-							clearShoppingCart={clearShoppingCart}
-						/>
-					</div>
+					<>
+						<DialogHeader>
+							<DialogTitle>Checkout your order</DialogTitle>
+							<DialogDescription>
+								Log in or continue as a guest.
+							</DialogDescription>
+						</DialogHeader>
+						<div className="flex justify-between">
+							{/* Log in */}
+							<LogInCheckout
+								shoppingCart={shoppingCart}
+								setLoading={setLoading}
+								setError={setError}
+								setResponse={setResponse}
+								clearShoppingCart={clearShoppingCart}
+							/>
+							{/* Vertical divider */}
+							<div className="mx-4 w-0.5 bg-gray-200" />
+							{/* Guest checkout */}
+							<GuestCheckout
+								shoppingCart={shoppingCart}
+								setLoading={setLoading}
+								setError={setError}
+								setResponse={setResponse}
+								clearShoppingCart={clearShoppingCart}
+							/>
+						</div>
+					</>
 				)}
 			</DialogContent>
 		</Dialog>
